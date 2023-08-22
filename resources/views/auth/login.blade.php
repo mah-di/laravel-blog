@@ -1,5 +1,8 @@
 <x-guest-layout>
     <!-- Session Status -->
+
+    @include('layouts.auth-navigation')
+
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">

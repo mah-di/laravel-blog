@@ -1,4 +1,7 @@
 <x-guest-layout>
+
+    @include('layouts.auth-navigation')
+
     <form method="POST" action="{{ route('register') }}">
         @csrf
 
