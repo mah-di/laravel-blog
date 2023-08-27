@@ -4,8 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Attribute;
-use Illuminate\Database\Eloquent\Casts\Attribute as CastsAttribute;
+use DateTime;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,8 +48,18 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected function profileImageUrl(): CastsAttribute
+    protected function password(): Attribute
     {
-        return CastsAttribute::make(get: fn () => env('APP_URL')."/storage/$this->profile_image");
+        return Attribute::make(set: fn ($value) => bcrypt($value));
+    }
+
+    protected function profileImageUrl(): Attribute
+    {
+        return Attribute::make(get: fn () => (strpos($this->profile_image, '://')) ? $this->profile_image : env('APP_URL')."/storage/$this->profile_image");
+    }
+
+    protected function dateJoined(): Attribute
+    {
+        return Attribute::make(get: fn () => date('d M Y', strtotime($this->created_at)));
     }
 }

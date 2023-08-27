@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Facades\ImageCleanupFacade;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -21,7 +22,7 @@ class ProfileController extends Controller
         if (!$user) {
             abort(404);
         }
-        return $user;
+        return view('profile.show', ['user' => $user]);
     }
 
     /**
@@ -62,6 +63,8 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
+
+        ImageCleanupFacade::run($user->profile_image);
 
         $user->delete();
 

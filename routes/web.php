@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactNumberController;
+use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileImageController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,12 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/auth/github/redirect', [OAuthController::class, 'githubRedirect'])->name('login.github');
+Route::get('/auth/github/callback', [OAuthController::class, 'githubCallback'])->name('callback.github');
+
+Route::get('/auth/google/redirect', [OAuthController::class, 'googleRedirect'])->name('login.google');
+Route::get('/auth/google/callback', [OAuthController::class, 'googleCallback'])->name('callback.google');
 
 Route::get('/profile/{id}', [ProfileController::class, 'show'])->name('profile.show');
 Route::middleware('auth')->group(function () {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Facades\ImageCleanupFacade;
 use DateTime;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
@@ -46,11 +47,7 @@ class ProfileImageUpdateRequest extends FormRequest
 
         Storage::disk('public')->put($path, $image->encode());
 
-        $defaultProfileImage = env('DEFAULT_PROFILE_IMAGE');
-
-        if ($this->user()->profile_image != $defaultProfileImage and Storage::disk('public')->exists($this->user()->profile_image)) {
-            Storage::disk('public')->delete($this->user()->profile_image);
-        }
+        ImageCleanupFacade::run($this->user()->profile_image);
 
         $this->user()->update(['profile_image' => "$path"]);
     }

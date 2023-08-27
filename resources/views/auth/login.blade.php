@@ -5,6 +5,24 @@
 
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
+    <br><div class="mb-6" style="display: flex; justify-content: space-around">
+        <div style="display: inline-flex">
+            <a href="{{ route('login.github') }}" class="rounded-full">
+                <x-primary-button>
+                    {{ __('Log in With Github') }}
+                </x-primary-button>
+            </a>
+        </div>
+        
+        <div style="display: inline-flex">
+            <a href="{{ route('login.google') }}" class="rounded-full">
+                <x-primary-button>
+                    {{ __('Log in With Google') }}
+                </x-primary-button>
+            </a>
+        </div>
+    </div><br>
+
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
