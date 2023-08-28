@@ -1,8 +1,6 @@
 <x-guest-layout>
     <!-- Session Status -->
 
-    @include('layouts.auth-navigation')
-
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <br><div class="mb-6" style="display: flex; justify-content: space-around">

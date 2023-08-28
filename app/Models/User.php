@@ -48,18 +48,23 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    protected function password(): Attribute
+    public function blogs()
     {
-        return Attribute::make(set: fn ($value) => bcrypt($value));
+        return $this->hasMany(Blog::class, 'user_id');
     }
 
-    protected function profileImageUrl(): Attribute
+    protected function setPasswordAttribute($value): void
     {
-        return Attribute::make(get: fn () => (strpos($this->profile_image, '://')) ? $this->profile_image : env('APP_URL')."/storage/$this->profile_image");
+        $this->attributes['password'] = bcrypt($value);
     }
 
-    protected function dateJoined(): Attribute
+    protected function getProfileImageUrlAttribute(): string
     {
-        return Attribute::make(get: fn () => date('d M Y', strtotime($this->created_at)));
+        return (strpos($this->profile_image, '://')) ? $this->profile_image : env('APP_URL')."/storage/$this->profile_image";
+    }
+
+    protected function getDateJoinedAttribute(): string
+    {
+        return date('d M Y', strtotime($this->created_at));
     }
 }
