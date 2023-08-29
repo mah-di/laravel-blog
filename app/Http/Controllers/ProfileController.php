@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Facades\ImageCleanupFacade;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,7 +23,11 @@ class ProfileController extends Controller
         if (!$user) {
             abort(404);
         }
-        return view('profile.show', ['user' => $user]);
+
+        $blogs = Blog::fetchBlogs(4, ['user_id' => $user->id]);
+        $blogCount = Blog::where(['user_id' => $user->id])->count();
+
+        return view('profile.show', ['user' => $user, 'blogs' => $blogs, 'blogCount' => $blogCount]);
     }
 
     /**

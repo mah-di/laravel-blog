@@ -1,3 +1,13 @@
+.grid-gap {
+    grid-gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .md-grid-cols-4 {
+        grid-template-columns: repeat(4,minmax(0,1fr));
+    }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

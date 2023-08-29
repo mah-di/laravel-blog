@@ -13,6 +13,17 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <style>
+            .grid-gap {
+                grid-gap: 20px;
+            }
+
+            @media (min-width: 768px) {
+                .md-grid-cols-4 {
+                    grid-template-columns: repeat(4,minmax(0,1fr));
+                }
+            }
+        </style>
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
