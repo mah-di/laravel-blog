@@ -52,19 +52,40 @@ class User extends Authenticatable
     {
         return $this->hasMany(Blog::class, 'user_id');
     }
-
+    
     protected function setPasswordAttribute($value): void
     {
         $this->attributes['password'] = bcrypt($value);
     }
-
+    
     protected function getProfileImageUrlAttribute(): string
     {
         return (strpos($this->profile_image, '://')) ? $this->profile_image : env('APP_URL')."/storage/$this->profile_image";
     }
-
+    
     protected function getDateJoinedAttribute(): string
     {
         return date('d M Y', strtotime($this->created_at));
     }
+
+    public function getBlogsSevenDaysAttribute()
+    {
+        return $this->blogs->where('created_at', '>', now()->subDays(7)->startOfDay())->get();
+    }
+
+    public function getBlogsSevenDaysCountAttribute()
+    {
+        return $this->blogs->where('created_at', '>', now()->subDays(7)->startOfDay())->count();
+    }
+
+    public function getBlogsThirtyDaysAttribute()
+    {
+        return $this->blogs->where('created_at', '>', now()->subDays(30)->startOfDay())->get();
+    }
+
+    public function getBlogsThirtyDaysCountAttribute()
+    {
+        return $this->blogs->where('created_at', '>', now()->subDays(30)->startOfDay())->count();
+    }
+
 }

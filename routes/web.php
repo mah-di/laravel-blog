@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Blog\BlogController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ContactNumberController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\ProfileController;
@@ -23,7 +24,15 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::get('/admin', [AdminController::class, 'show'])->name('admin.dashboard')->middleware('admin.check');
+Route::middleware(['auth', 'admin.check'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'show'])->name('admin.dashboard');
+    Route::get('/admin/categories', [CategoryController::class, 'show'])->name('category.show');
+    Route::get('/admin/create/category', [CategoryController::class, 'create'])->name('category.create');
+    Route::post('/admin/create/category', [CategoryController::class, 'store'])->name('category.store');
+    Route::get('/admin/update/category/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::patch('/admin/update/category/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/admin/update/category/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');
