@@ -13,12 +13,24 @@ class Blog extends Model
         'title',
         'body',
         'user_id',
-        'cover_image'
+        'cover_image',
+        'category_id',
+        'sub_category_id',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function sub_category()
+    {
+        return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
     public static function fetchBlogs($limit = 10, $where = null)

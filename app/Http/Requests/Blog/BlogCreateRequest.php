@@ -4,11 +4,14 @@ namespace App\Http\Requests\Blog;
 
 use DateTime;
 use App\Models\Blog;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Validation\ValidationException;
 
 class BlogCreateRequest extends FormRequest
 {
@@ -38,10 +41,22 @@ class BlogCreateRequest extends FormRequest
 
     protected function passedValidation()
     {
+        if (!$this->session()->get('category')) {
+            $this->session->flash('category_missing', true);
+            return;
+        }
+        
+        if (!$this->session()->get('sub_category')) {
+            $this->session->flash('sub_category_missing', true);
+            return;
+        }
+
         $blog = [
             'title' => $this->title,
             'body' => $this->body,
-            'user_id' => $this->user()->id
+            'user_id' => $this->user()->id,
+            'category_id' => intval($this->session()->get('category')),
+            'sub_category_id' => intval($this->session()->get('sub_category')),
         ];
 
         if ($this->cover_image !== null) {
@@ -60,6 +75,16 @@ class BlogCreateRequest extends FormRequest
             $blog['cover_image'] = $path;
         }
 
-        $this->blog_id = Blog::create($blog)->id;
+        $blog_id = Blog::create($blog)->id;
+
+        $this->session()->flash('blog_id', $blog_id);
     }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $this->session()->reflash();
+
+        throw new ValidationException($validator);
+    }
+
 }

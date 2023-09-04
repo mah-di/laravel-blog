@@ -17,6 +17,12 @@
                     </x-nav-link>
                 </div>
 
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('profile.show', request()->user()->id)" :active="request()->routeIs('profile.show', request()->user()->id)">
+                        {{ __('Profile') }}
+                    </x-nav-link>
+                </div>
+
                 @if(Auth::user()->is_admin)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
@@ -24,12 +30,35 @@
                     </x-nav-link>
                 </div>
                 @endif
-
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('profile.show', request()->user()->id)" :active="request()->routeIs('profile.show', request()->user()->id)">
-                        {{ __('Profile') }}
-                    </x-nav-link>
+                
+                @if(Auth::user()->is_admin)
+                <!-- Categories Dropdown -->
+                <div class="hidden sm:flex sm:items-center sm:ml-6">
+                    <x-dropdown width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                                <div>{{ __('Blogging Categories') }}</div>
+                                
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+                        
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('category.show')">
+                                {{ __('All Categories') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('category.create')">
+                                {{ __('Add New Category') }}
+                            </x-dropdown-link>
+                        </x-slot>
+                    </x-dropdown>
                 </div>
+                @endif
+
             </div>
 
             <!-- Settings Dropdown -->
@@ -48,7 +77,7 @@
                     </x-slot>
 
                     <x-slot name="content">
-                        <x-dropdown-link :href="route('blog.create')">
+                        <x-dropdown-link :href="route('blog.show.step1')">
                             {{ __('New Blog') }}
                         </x-dropdown-link>
                         <x-dropdown-link :href="route('profile.edit')">

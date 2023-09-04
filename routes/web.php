@@ -7,6 +7,7 @@ use App\Http\Controllers\ContactNumberController;
 use App\Http\Controllers\OAuthController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProfileImageController;
+use App\Http\Controllers\SubCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,12 +27,16 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'admin.check'])->group(function () {
     Route::get('/admin', [AdminController::class, 'show'])->name('admin.dashboard');
+
     Route::get('/admin/categories', [CategoryController::class, 'show'])->name('category.show');
     Route::get('/admin/create/category', [CategoryController::class, 'create'])->name('category.create');
     Route::post('/admin/create/category', [CategoryController::class, 'store'])->name('category.store');
-    Route::get('/admin/update/category/{id}', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::patch('/admin/update/category/{id}', [CategoryController::class, 'update'])->name('category.update');
-    Route::delete('/admin/update/category/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::get('/admin/edit/category/{id}', [CategoryController::class, 'edit'])->name('category.edit');
+    Route::patch('/admin/edit/category/{id}', [CategoryController::class, 'update'])->name('category.update');
+    Route::delete('/admin/category/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+
+    Route::post('/admin/sub-category', [SubCategoryController::class, 'create'])->name('subCategory.create');
+    Route::delete('/admin/sub-category/{id}', [SubCategoryController::class, 'delete'])->name('subCategory.delete');
 });
 
 Route::get('/dashboard', function () {
@@ -55,8 +60,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile/image', [ProfileImageController::class, 'update'])->name('profile.image.update');
     Route::delete('/profile/image', [ProfileImageController::class, 'delete'])->name('profile.image.delete');
     
-    Route::get('/blog/create', [BlogController::class, 'create'])->name('blog.create');
-    Route::post('/blog/create', [BlogController::class, 'store'])->name('blog.store');
+    Route::get('/blog/create/step/1', [BlogController::class, 'showStep1'])->name('blog.show.step1');
+    Route::post('/blog/create/step/1', [BlogController::class, 'storeStep1'])->name('blog.store.step1');
+    Route::get('/blog/create/step/2', [BlogController::class, 'showStep2'])->name('blog.show.step2');
+    Route::post('/blog/create/step/2', [BlogController::class, 'storeStep2'])->name('blog.store.step2');
+    Route::get('/blog/create/step/3', [BlogController::class, 'showStep3'])->name('blog.show.step3');
+    Route::post('/blog/create', [BlogController::class, 'storeStep3'])->name('blog.store.step3');
     Route::patch('/blog/update', [BlogController::class, 'update'])->name('blog.update');
     Route::delete('/blog/delete', [BlogController::class, 'delete'])->name('blog.delete');
 });

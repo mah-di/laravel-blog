@@ -3,7 +3,6 @@
         <h2 style="text-align: center;" class="font-semibold text-xl text-gray-800 leading-tight">
             Admin Dashboard | {{ $admin->name }}
         </h2>
-        <p><a href="{{ route('category.create') }}">Add New Category</a></p>
     </x-slot>
 
     <div class="py-12">

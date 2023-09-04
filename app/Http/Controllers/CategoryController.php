@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Category\CategoryCreateUpdateRequest;
+use App\Http\Requests\Category\CategoryCreateRequest;
+use App\Http\Requests\Category\CategoryUpdateRequest;
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -21,10 +22,10 @@ class CategoryController extends Controller
 
     public function create(Request $request): View
     {
-        return view('admin.category.create');
+        return view('category.show-categories');
     }
 
-    public function store(CategoryCreateUpdateRequest $request): RedirectResponse
+    public function store(CategoryCreateRequest $request): RedirectResponse
     {
         return Redirect::route('admin.dashboard');
     }
@@ -43,13 +44,15 @@ class CategoryController extends Controller
         return view('admin.category.edit', ['category' => $category, 'sub_categories_input' => $sub_categories_input]);
     }
 
-    public function update(CategoryCreateUpdateRequest $request, int $id): RedirectResponse
+    public function update(CategoryUpdateRequest $request, int $id): RedirectResponse
     {
-        return Redirect::route('admin.dashboard');
+        return Redirect::route('category.show');
     }
 
     public function delete(Request $request, int $id): RedirectResponse
     {
+        Category::find($id)->delete();
+
         return Redirect::back();
     }
 
