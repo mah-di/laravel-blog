@@ -66,10 +66,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/blog/create/step/2', [BlogController::class, 'storeStep2'])->name('blog.store.step2');
     Route::get('/blog/create/step/3', [BlogController::class, 'showStep3'])->name('blog.show.step3');
     Route::post('/blog/create', [BlogController::class, 'storeStep3'])->name('blog.store.step3');
-    Route::patch('/blog/update', [BlogController::class, 'update'])->name('blog.update');
-    Route::delete('/blog/delete', [BlogController::class, 'delete'])->name('blog.delete');
+
+    Route::middleware('blog.author.check')->group(function () {
+        Route::get('/blog/update/{id}', [BlogController::class, 'edit'])->name('blog.edit');
+        Route::patch('/blog/update/{id}', [BlogController::class, 'update'])->name('blog.update');
+        Route::get('/blog/category/update/{id}', [BlogController::class, 'editCategory'])->name('blog.category.edit');
+        Route::patch('/blog/category/update/{id}', [BlogController::class, 'updateCategory'])->name('blog.category.update');
+        Route::get('/blog/sub-category/update/{id}', [BlogController::class, 'editSubCategory'])->name('blog.subCategory.edit');
+        Route::patch('/blog/sub-category/update/{id}', [BlogController::class, 'updateSubCategory'])->name('blog.subCategory.update');
+        Route::delete('/blog/cover-image/delete/{id}', [BlogController::class, 'deleteCoverImage'])->name('cover.image.delete');
+        Route::delete('/blog/delete/{id}', [BlogController::class, 'delete'])->name('blog.delete');
+    });
+
 });
 
-Route::get('/blog/{blog_id}', [BlogController::class, 'show'])->name('blog.show');
+
+Route::get('/blog/{id}', [BlogController::class, 'show'])->middleware('blog.exists')->name('blog.show');
 
 require __DIR__.'/auth.php';

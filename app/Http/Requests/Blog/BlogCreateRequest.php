@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Blog;
 
+use App\Facades\SaveCoverImageFacade;
 use DateTime;
 use App\Models\Blog;
 use Illuminate\Contracts\Validation\Validator;
@@ -10,7 +11,6 @@ use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rules\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Validation\ValidationException;
 
 class BlogCreateRequest extends FormRequest
@@ -60,19 +60,7 @@ class BlogCreateRequest extends FormRequest
         ];
 
         if ($this->cover_image !== null) {
-            $dt = DateTime::createFromFormat('U.u', microtime(true));
-            $now = $dt->format("YmdHisu");
-
-            $extention = $this->file('cover_image')->getClientOriginalExtension();
-            $filename = Str::uuid()->toString()."$now.$extention";
-
-            $image = Image::make($this->file('cover_image'));
-            $image->fit(1152, 300);
-
-            $path = "img/cover-images/$filename";
-
-            Storage::disk('public')->put($path, $image->encode());
-            $blog['cover_image'] = $path;
+            $blog['cover_image'] = SaveCoverImageFacade::save($this->file('cover_image'));
         }
 
         $blog_id = Blog::create($blog)->id;

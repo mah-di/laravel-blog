@@ -34,4 +34,48 @@
             </section>
         </div>
     </div>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6"> 
+            <section  class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
+                <!-- Card Grid -->
+                @if ($categoryRelatedBlogs->count() > 1)
+                    <h2>Related blogs on <b><a href="{{ route('profile.show', $blogger->id) }}">{{ $blog->category->name }}</a></b> Category</h2><br>
+                    <div class="grid grid-flow-row grid-gap text-neutral-600 md-grid-cols-4 sm:grid-cols-1">
+                    @foreach($categoryRelatedBlogs as $blogPost)
+
+                        @if($blogPost->id !== $blog->id)
+
+                            @include('blog.partials.blog-card')
+
+                        @endif
+                        
+                    @endforeach
+                    </div>
+                @endif
+            </section>
+        </div>
+    </div>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6"> 
+            <section  class="bg-gray-100 dark:bg-gray-900 py-10 px-12">
+                <!-- Card Grid -->
+                @if ($subCategoryRelatedBlogs->count() > 1)
+                    <h2>More blogs on <b><a href="{{ route('profile.show', $blogger->id) }}">{{ $blog->sub_category->name }}</a></b> Sub Category</h2><br>
+                    <div class="grid grid-flow-row grid-gap text-neutral-600 md-grid-cols-4 sm:grid-cols-1">
+                    @foreach($subCategoryRelatedBlogs as $blogPost)
+
+                        @if($blogPost->id !== $blog->id)
+
+                            @include('blog.partials.blog-card')
+
+                        @endif
+                        
+                    @endforeach
+                    </div>
+                @endif
+            </section>
+        </div>
+    </div>
 </x-app-layout>

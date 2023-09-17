@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog;
 
+use App\Facades\ImageCleanupFacade;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Blog\BlogCreateRequest;
 use App\Http\Requests\Blog\BlogUpdateRequest;
@@ -15,15 +16,19 @@ use Illuminate\View\View;
 
 class BlogController extends Controller
 {
-    public function show($blog_id): View
+    public function show(Request $request, int $id): View
     {
-        $blog = Blog::find($blog_id);
+        $blog = Blog::find($id);
 
         $blogger = $blog->user;
 
         $relatedBlogs = Blog::fetchBlogs(5, ['user_id' => $blogger->id]);
 
-        return view('blog.show', ['blog' => $blog, 'blogger' => $blogger, 'relatedBlogs' => $relatedBlogs]);
+        $categoryRelatedBlogs = Blog::fetchBlogs(5, ['category_id' => $blog->category_id]);
+
+        $subCategoryRelatedBlogs = Blog::fetchBlogs(5, ['sub_category_id' => $blog->sub_category_id]);
+
+        return view('blog.show', ['blog' => $blog, 'blogger' => $blogger, 'relatedBlogs' => $relatedBlogs, 'categoryRelatedBlogs' => $categoryRelatedBlogs, 'subCategoryRelatedBlogs' => $subCategoryRelatedBlogs]);
     }
 
     public function showStep1(Request $request): View
@@ -122,14 +127,106 @@ class BlogController extends Controller
         return Redirect::route('blog.show', $request->session()->get('blog_id'));
     }
 
-    public function update(BlogUpdateRequest $request)
+    public function edit(Request $request, int $id): View
     {
+        $blog = Blog::find($id);
 
+        $request->session()->keep(['category', 'categoryName', 'subCategory', 'subCategoryName']);
+
+        $category = $request->session()->get('category');
+        $categoryName = $request->session()->get('categoryName');
+        $subCategory = $request->session()->get('subCategory');
+        $subCategoryName = $request->session()->get('subCategoryName');
+
+        return view('blog.edit', ['blog' => $blog, 'category' => $category, 'categoryName' => $categoryName, 'subCategory' => $subCategory, 'subCategoryName' => $subCategoryName]);
     }
 
-    public function delete(Request $request)
+    public function update(BlogUpdateRequest $request, int $id): RedirectResponse
     {
+        return Redirect::route('blog.show', $id);
+    }
 
+    public function editCategory(Request $request, int $id): View
+    {
+        $categories = Category::all();
+
+        $blog = Blog::find($id);
+
+        return view('blog.edit', ['blog' => $blog, 'categories' => $categories]);
+    }
+
+    public function updateCategory(Request $request, int $id): RedirectResponse
+    {
+        if ($request->category == null) {
+            return Redirect::back()->with('error', 'Please select a valid category');
+        }
+
+        [$category, $categoryName] = explode('|', $request->category);
+
+        $request->session()->flash('category', $category);
+        $request->session()->flash('categoryName', $categoryName);
+
+        return Redirect::route('blog.subCategory.edit', $id);
+    }
+
+    public function editSubCategory(Request $request, int $id): View|RedirectResponse
+    {
+        $request->session()->reflash();
+
+        $category = $request->session()->get('category');
+        $categoryName = $request->session()->get('categoryName');
+
+        if (!$category) {
+            return Redirect::route('blog.category.edit', $id);
+        }
+        
+        $blog = Blog::find($id);
+
+        $subCategories = SubCategory::where('category_id', $category)->get();
+        
+        return view('blog.edit', ['blog' => $blog, 'category' => $category, 'categoryName' => $categoryName, 'subCategories' => $subCategories]);
+    }
+    
+    public function updateSubCategory(Request $request, int $id): RedirectResponse
+    {
+        $request->session()->keep(['category', 'categoryName']);
+
+        if ($request->subCategory == null) {
+            [$subCategory, $subCategoryName] = [null, null];
+        } else {
+            [$subCategory, $subCategoryName] = explode('|', $request->subCategory);
+        }
+
+        if ($request->sub_category && !SubCategory::where(['id' => $request->sub_category, 'category_id' => $request->category])->count()) {
+            return Redirect::back()->with('error', 'Please select a valid sub category');
+        }
+
+        $request->session()->flash('subCategory', $subCategory);
+        $request->session()->flash('subCategoryName', $subCategoryName);
+
+        return Redirect::route('blog.update', $id);
+    }
+
+    public function delete(Request $request, int $id): RedirectResponse
+    {
+        $blog = Blog::find($id);
+
+        ImageCleanupFacade::coverImageCleanup($blog->cover_image);
+
+        $blog->delete();
+
+        return Redirect::route('dashboard')->with('message', 'Blog was deleted successfully.');
+    }
+
+    public function deleteCoverImage(Request $request, int $id): RedirectResponse
+    {
+        $blog = Blog::find($id);
+
+        ImageCleanupFacade::coverImageCleanup($blog->cover_image);
+
+        Blog::find($id)->update(['cover_image' => env('DEFAULT_COVER_IMAGE')]);
+
+        return Redirect::back();
     }
 
 }

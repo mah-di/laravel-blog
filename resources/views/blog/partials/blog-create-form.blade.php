@@ -38,14 +38,17 @@
         <input type="hidden" name="category" value="{{ $category }}">
         <input type="hidden" name="sub_category" value="{{ $sub_category }}">
         <div>
+            <x-input-label for="title" :value="__('Title')" />
             <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title')" required autofocus autocomplete="title" />
             <x-input-error class="mt-2" :messages="$errors->get('title')" />
         </div>
         <div>
+            <x-input-label for="body" :value="__('Body')" />
             <textarea rows="20" id="body" name="body" class="mt-1 block w-full rounded shadow border-gray-100" required autofocus autocomplete="body" >{{old('body')}}</textarea>
             <x-input-error class="mt-2" :messages="$errors->get('body')" />
         </div>
         <div>
+            <x-input-label for="cover_image" :value="__('Cover Image')" />
             <x-text-input id="cover_image" name="cover_image" type="file" class="mt-1 block w-full border-gray-100" autofocus autocomplete="cover_image" />
             <x-input-error class="mt-2" :messages="$errors->get('cover_image')" />
         </div>

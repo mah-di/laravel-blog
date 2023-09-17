@@ -66,5 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'admin.check' => \App\Http\Middleware\Custom\AdminCheck::class,
+        'blog.author.check' => \App\Http\Middleware\Custom\BlogAuthorCheck::class,
+        'blog.exists' => \App\Http\Middleware\Custom\BlogExistence::class,
     ];
 }
