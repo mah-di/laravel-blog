@@ -64,7 +64,24 @@
             <p>{!! nl2br($blog->body) !!}</p>
         </div>
 
+        <br><hr><br>
+
+        @if ($blog->isLiked())
+        <form method="post" action="">
+            @csrf
+            <x-secondary-button>{{ __('💔 Unlike') }}</x-secondary-button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ $blog->getLikesCount() }} likes
+        </form>
         
+        @else
+        <form method="post" action="">
+            @csrf
+            <x-secondary-button>{{ __('❤️ Like') }}</x-secondary-button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{ $blog->getLikesCount() }} likes
+        </form>
+        @endif
     </div>
     
 </section>

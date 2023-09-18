@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Blog extends Model
 {
@@ -36,6 +37,16 @@ class Blog extends Model
     public function likes()
     {
         return $this->hasMany(Like::class, 'blog_id');
+    }
+
+    public function getLikesCount(): int
+    {
+        return Like::where('blog_id', $this->id)->count();
+    }
+
+    public function isLiked()
+    {
+        return Like::where(['user_id' => Auth::user()->id, 'blog_id' => $this->id])->exists();
     }
 
     public static function fetchBlogs($limit = 10, $where = null)
