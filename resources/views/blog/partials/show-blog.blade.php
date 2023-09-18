@@ -66,21 +66,27 @@
 
         <br><hr><br>
 
-        @if ($blog->isLiked())
-        <form method="post" action="">
-            @csrf
-            <x-secondary-button>{{ __('💔 Unlike') }}</x-secondary-button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {{ $blog->getLikesCount() }} likes
-        </form>
+        @if (Auth::user())
+            @if ($blog->isLiked())
+            <form method="post" action="{{ route('blog.unlike', $blog->id) }}">
+                @csrf
+                @method('delete')
+                <x-secondary-submit-button>{{ __('💔 Unlike') }}</x-secondary-submit-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ $blog->getLikesCount() }} likes
+            </form>
+            
+            @else
+            <form method="post" action="{{ route('blog.like', $blog->id) }}">
+                @csrf
+                <x-secondary-submit-button>{{ __('❤️ Like') }}</x-secondary-submit-button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                {{ $blog->getLikesCount() }} likes
+            </form>
+            @endif
         
         @else
-        <form method="post" action="">
-            @csrf
-            <x-secondary-button>{{ __('❤️ Like') }}</x-secondary-button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            {{ $blog->getLikesCount() }} likes
-        </form>
+            <div>{{ $blog->getLikesCount() }} likes</div>
         @endif
     </div>
     
