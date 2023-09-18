@@ -31,4 +31,9 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id');
     }
 
+    protected function getDateCreatedAttribute(): string
+    {
+        return date('d M Y', strtotime($this->created_at));
+    }
+
 }
