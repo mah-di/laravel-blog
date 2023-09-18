@@ -39,9 +39,19 @@ class Blog extends Model
         return $this->hasMany(Like::class, 'blog_id');
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'blog_id');
+    }
+
     public function getLikesCount(): int
     {
         return Like::where('blog_id', $this->id)->count();
+    }
+
+    public function getCommentsCount(): int
+    {
+        return Comment::where('blog_id', $this->id)->count();
     }
 
     public function isLiked()

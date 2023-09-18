@@ -55,7 +55,12 @@ class User extends Authenticatable
 
     public function likes()
     {
-        return $this->hasMany(Likes::class, 'user_id');
+        return $this->hasMany(Like::class, 'user_id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class, 'user_id');
     }
 
     protected function setPasswordAttribute($value): void
