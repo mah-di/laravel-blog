@@ -33,6 +33,11 @@ class Blog extends Model
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
+    public function likes()
+    {
+        return $this->hasMany(Like::class, 'blog_id');
+    }
+
     public static function fetchBlogs($limit = 10, $where = null)
     {
         if ($where !== null) {

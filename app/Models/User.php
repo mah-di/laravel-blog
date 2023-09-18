@@ -52,7 +52,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Blog::class, 'user_id');
     }
-    
+
+    public function likes()
+    {
+        return $this->hasMany(Likes::class, 'user_id');
+    }
+
     protected function setPasswordAttribute($value): void
     {
         $this->attributes['password'] = bcrypt($value);
