@@ -9,9 +9,10 @@
     <hr class="mb-4 mt-4">
 
     <div>
-        <form class="rounded" style="overflow: hidden" method="post" action="">
+        <form class="rounded" style="overflow: hidden" method="post" action="{{ route('blog.comment') }}">
             @csrf
             <input type="hidden" name="blog_id" value="{{ $blog->id }}">
+            <input type="hidden" name="parent_id" value>
             <div>
                 <textarea placeholder="{{ __('Write a comment') }}" rows="4" id="body" name="body" class="block w-full shadow border-gray-100" required autofocus autocomplete="body" >{{old('body')}}</textarea>
                 <x-input-error class="mt-2" :messages="$errors->get('body')" />
@@ -22,7 +23,7 @@
             </div>
         </form>
     </div>
-    
+
     <div class="mb-4 mt-4">
         @foreach ($blog->comments as $comment)
         <div class="rounded px-2" style="border-left: 2px solid #A5B7A5">
@@ -40,29 +41,26 @@
                                 &nbsp;&nbsp;
                                 <x-danger-button
                                     x-data=""
-                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion')"
+                                    x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion-{{ $comment->id }}')"
                                 >{{ __('Delete') }}</x-danger-button>
-        
-                                <x-modal name="confirm-blog-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                    <form method="post" action="{{ route('blog.delete', $blog->id) }}" class="p-6">
+
+                                <x-modal name="confirm-blog-deletion-{{ $comment->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                    <form method="post" action="{{ route('comment.delete') }}" class="p-6">
                                         @csrf
                                         @method('delete')
-        
+                                        <input type="hidden" name="id" value="{{ $comment->id }}">
+
                                         <h2 class="text-lg font-medium text-gray-900">
-                                            {{ __('Are you sure you want to delete this blog?') }}
+                                            {{ __('Are you sure you want to delete this comment?') }}
                                         </h2>
-        
-                                        <p class="mt-1 text-sm text-gray-600">
-                                            {{ __('Once the blog is deleted, all of its resources and data will be permanently deleted.') }}
-                                        </p>
-        
+
                                         <div class="mt-6 flex justify-end">
                                             <x-secondary-button x-on:click="$dispatch('close')">
                                                 {{ __('Cancel') }}
                                             </x-secondary-button>
         
                                             <x-danger-button class="ml-3">
-                                                {{ __('Delete Blog') }}
+                                                {{ __('Delete Comment') }}
                                             </x-danger-button>
                                         </div>
                                     </form>
@@ -74,10 +72,12 @@
                     <div class="mt-2 mb-2">
                         <p>{{ $comment->body }}</p>
                     </div>
+                    <br>
+                    <x-secondary-button class="show-reply-form " id="show-reply-form-{{ $comment->id }}" onclick='{{ "showReplyForm($comment->id)" }}'>{{ __("Reply To This Comment ⤴") }}</x-secondary-button>
                 </div>
-            
+
                 <div>
-                    <form class="rounded" style="overflow: hidden" method="post" action="">
+                    <form id="reply-form-{{ $comment->id }}" class="rounded" style="overflow: hidden; display: none;" method="post" action="{{ route('blog.comment') }}">
                         @csrf
                         <input type="hidden" name="blog_id" value="{{ $blog->id }}">
                         <input type="hidden" name="parent_id" value="{{ $comment->id }}">
@@ -92,7 +92,7 @@
                     </form>
                 </div>
             </div>
-            
+
             @foreach ($comment->replies as $reply)
             <div class="rounded px-2" style="border-left: 2px solid #A5B7A5">
                 <div class="mb-4 mt-4">
@@ -109,21 +109,18 @@
                                     &nbsp;&nbsp;
                                     <x-danger-button
                                         x-data=""
-                                        x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion')"
+                                        x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion-{{ $reply->id }}')"
                                     >{{ __('Delete') }}</x-danger-button>
             
-                                    <x-modal name="confirm-blog-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                        <form method="post" action="{{ route('blog.delete', $blog->id) }}" class="p-6">
+                                    <x-modal name="confirm-blog-deletion-{{ $reply->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                        <form method="post" action="{{ route('comment.delete') }}" class="p-6">
                                             @csrf
                                             @method('delete')
+                                            <input type="hidden" name="id" value="{{ $reply->id }}">
             
                                             <h2 class="text-lg font-medium text-gray-900">
-                                                {{ __('Are you sure you want to delete this blog?') }}
+                                                {{ __('Are you sure you want to delete this comment?') }}
                                             </h2>
-            
-                                            <p class="mt-1 text-sm text-gray-600">
-                                                {{ __('Once the blog is deleted, all of its resources and data will be permanently deleted.') }}
-                                            </p>
             
                                             <div class="mt-6 flex justify-end">
                                                 <x-secondary-button x-on:click="$dispatch('close')">
@@ -131,7 +128,7 @@
                                                 </x-secondary-button>
             
                                                 <x-danger-button class="ml-3">
-                                                    {{ __('Delete Blog') }}
+                                                    {{ __('Delete Comment') }}
                                                 </x-danger-button>
                                             </div>
                                         </form>
@@ -143,10 +140,12 @@
                         <div class="mb-2 mt-2">
                             <p>{{ $reply->body }}</p>
                         </div>
+                        <br>
+                        <x-secondary-button class="show-reply-form" id="show-reply-form-{{ $reply->id }}" onclick='{{ "showReplyForm($reply->id)" }}'>{{ __("Reply To This Comment ⤴") }}</x-secondary-button>
                     </div>
-                    
+
                     <div>
-                        <form class="rounded" style="overflow: hidden" method="post" action="">
+                        <form id="reply-form-{{ $reply->id }}" class="rounded" style="overflow: hidden; display: none;" method="post" action="{{ route('blog.comment') }}">
                             @csrf
                             <input type="hidden" name="blog_id" value="{{ $blog->id }}">
                             <input type="hidden" name="parent_id" value="{{ $reply->id }}">
@@ -161,7 +160,7 @@
                         </form>
                     </div>
                 </div>
-                    
+
                     @foreach ($reply->replies as $reply)
                     <div class="rounded px-2" style="border-left: 2px solid #A5B7A5">
                         <div class="mb-4 px-4 py-4 bg-gray-100 rounded">
@@ -177,29 +176,26 @@
                                         &nbsp;&nbsp;
                                         <x-danger-button
                                             x-data=""
-                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion')"
+                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-comment-deletion-{{ $reply->id }}')"
                                         >{{ __('Delete') }}</x-danger-button>
-                
-                                        <x-modal name="confirm-blog-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                            <form method="post" action="{{ route('blog.delete', $blog->id) }}" class="p-6">
+
+                                        <x-modal name="confirm-comment-deletion-{{ $reply->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
+                                            <form method="post" action="{{ route('comment.delete') }}" class="p-6">
                                                 @csrf
                                                 @method('delete')
-                
+                                                <input type="hidden" name="id" value="{{ $reply->id }}">
+
                                                 <h2 class="text-lg font-medium text-gray-900">
-                                                    {{ __('Are you sure you want to delete this blog?') }}
+                                                    {{ __('Are you sure you want to delete this comment?') }}
                                                 </h2>
-                
-                                                <p class="mt-1 text-sm text-gray-600">
-                                                    {{ __('Once the blog is deleted, all of its resources and data will be permanently deleted.') }}
-                                                </p>
-                
+
                                                 <div class="mt-6 flex justify-end">
                                                     <x-secondary-button x-on:click="$dispatch('close')">
                                                         {{ __('Cancel') }}
                                                     </x-secondary-button>
-                
+
                                                     <x-danger-button class="ml-3">
-                                                        {{ __('Delete Blog') }}
+                                                        {{ __('Delete Comment') }}
                                                     </x-danger-button>
                                                 </div>
                                             </form>
@@ -213,13 +209,20 @@
                             </div>
                         </div>
                     </div>
-    
+
                     @endforeach
                 </div>
-    
+
                 @endforeach
         </div>
         @endforeach
     </div>
-    
+
 </section>
+
+<script>
+    let showReplyForm = function (id) {
+        document.querySelector('#show-reply-form-'+id).style.display = 'none';
+        document.querySelector('#reply-form-'+id).style.display = 'block';
+    }
+</script>

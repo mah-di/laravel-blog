@@ -3,13 +3,9 @@
 namespace App\Http\Requests\Blog;
 
 use App\Facades\SaveCoverImageFacade;
-use DateTime;
 use App\Models\Blog;
 use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Support\Str;
-use Intervention\Image\Facades\Image;
 use Illuminate\Validation\Rules\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 

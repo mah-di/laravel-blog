@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'admin.check' => \App\Http\Middleware\Custom\AdminCheck::class,
         'blog.author.check' => \App\Http\Middleware\Custom\BlogAuthorCheck::class,
         'blog.exists' => \App\Http\Middleware\Custom\BlogExistence::class,
+        'comment.author.check' => \App\Http\Middleware\Custom\CommentAuthorCheck::class,
     ];
 }

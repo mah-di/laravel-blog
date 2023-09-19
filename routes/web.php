@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Blog\BlogController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\Comment\CommentController;
 use App\Http\Controllers\ContactNumberController;
 use App\Http\Controllers\Like\LikeController;
 use App\Http\Controllers\OAuthController;
@@ -79,8 +80,13 @@ Route::middleware('auth')->group(function () {
         Route::delete('/blog/delete/{id}', [BlogController::class, 'delete'])->name('blog.delete');
     });
 
+    Route::middleware('comment.author.check')->group(function () {
+        Route::delete('/comment/delete', [CommentController::class, 'deleteComment'])->name('comment.delete');
+    });
+
     Route::post('/blog/like/{id}', [LikeController::class, 'like'])->name('blog.like');
     Route::delete('/blog/like/{id}', [LikeController::class, 'unlike'])->name('blog.unlike');
+    Route::post('/blog/comment', [CommentController::class, 'postComment'])->name('blog.comment');
 
 });
 
