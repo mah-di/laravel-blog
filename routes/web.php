@@ -82,6 +82,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('comment.author.check')->group(function () {
         Route::delete('/comment/delete', [CommentController::class, 'deleteComment'])->name('comment.delete');
+        Route::patch('/comment/update', [CommentController::class, 'updateComment'])->name('comment.update');
     });
 
     Route::post('/blog/like/{id}', [LikeController::class, 'like'])->name('blog.like');

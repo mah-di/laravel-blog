@@ -229,7 +229,7 @@
     let showUpdateForm = function (comment, csrfToken) {
         let form = `
             <div id="update-form-${comment.id}">
-                <form class="rounded" style="overflow: hidden" method="post" action="/blog/comment/update">
+                <form class="rounded" style="overflow: hidden" method="post" action="/comment/update">
                     <input type="hidden" name="csrf_token" value=${csrfToken}>
                     <input type="hidden" name="method" value="patch">
                     <input type="hidden" name="blog_id" value=${comment.blog_id}>
