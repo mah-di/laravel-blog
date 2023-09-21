@@ -28,7 +28,7 @@ class BlogController extends Controller
 
         $subCategoryRelatedBlogs = Blog::fetchBlogs(5, ['sub_category_id' => $blog->sub_category_id]);
 
-        return view('blog.show', ['blog' => $blog, 'blogger' => $blogger, 'relatedBlogs' => $relatedBlogs, 'categoryRelatedBlogs' => $categoryRelatedBlogs, 'subCategoryRelatedBlogs' => $subCategoryRelatedBlogs]);
+        return view('blog.show', ['blog' => $blog, 'blogger' => $blogger, 'relatedBlogs' => $relatedBlogs, 'categoryRelatedBlogs' => $categoryRelatedBlogs, 'subCategoryRelatedBlogs' => $subCategoryRelatedBlogs, 'csrfToken' => csrf_token()]);
     }
 
     public function showStep1(Request $request): View

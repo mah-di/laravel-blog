@@ -27,7 +27,7 @@
     <div class="mb-4 mt-4">
         @foreach ($blog->comments as $comment)
         <div class="rounded px-2" style="border-left: 2px solid #A5B7A5">
-            <div class="mb-4 mt-4">
+            <div id="comment-{{ $comment->id }}" class="mb-4 mt-4">
                 <div class="mb-4 px-4 py-4 bg-gray-100 rounded">
                     <div class="mb-4" style="display: flex; justify-content: space-between">
                         <div>
@@ -37,7 +37,7 @@
 
                         <div>
                             @if (Auth::user() == $blogger)
-                                <a href="{{ route('blog.edit', $blog->id) }}"><x-secondary-button>{{ __('Update') }}</x-secondary-button></a>
+                                <x-secondary-button onclick='{{ "showUpdateForm($comment, `$csrfToken`)" }}'>{{ __('Update') }}</x-secondary-button>
                                 &nbsp;&nbsp;
                                 <x-danger-button
                                     x-data=""
@@ -95,7 +95,7 @@
 
             @foreach ($comment->replies as $reply)
             <div class="rounded px-2" style="border-left: 2px solid #A5B7A5">
-                <div class="mb-4 mt-4">
+                <div id="comment-{{ $reply->id }}" class="mb-4 mt-4">
                     <div class="mb-4 px-4 py-4 bg-gray-100 rounded">
                         <div class="mb-4" style="display: flex; justify-content: space-between">
                             <div>
@@ -105,7 +105,7 @@
 
                             <div>
                                 @if (Auth::user() == $blogger)
-                                    <a href="{{ route('blog.edit', $blog->id) }}"><x-secondary-button>{{ __('Update') }}</x-secondary-button></a>
+                                    <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>{{ __('Update') }}</x-secondary-button>
                                     &nbsp;&nbsp;
                                     <x-danger-button
                                         x-data=""
@@ -162,7 +162,7 @@
                 </div>
 
                     @foreach ($reply->replies as $reply)
-                    <div class="rounded px-2" style="border-left: 2px solid #A5B7A5">
+                    <div id="comment-{{ $reply->id }}" class="rounded px-2" style="border-left: 2px solid #A5B7A5">
                         <div class="mb-4 px-4 py-4 bg-gray-100 rounded">
                             <div class="mb-4" style="display: flex; justify-content: space-between">
                                 <div>
@@ -172,7 +172,7 @@
 
                                 <div>
                                     @if (Auth::user() == $blogger)
-                                        <a href="{{ route('blog.edit', $blog->id) }}"><x-secondary-button>{{ __('Update') }}</x-secondary-button></a>
+                                        <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>{{ __('Update') }}</x-secondary-button>
                                         &nbsp;&nbsp;
                                         <x-danger-button
                                             x-data=""
@@ -224,5 +224,32 @@
     let showReplyForm = function (id) {
         document.querySelector('#show-reply-form-'+id).style.display = 'none';
         document.querySelector('#reply-form-'+id).style.display = 'block';
+    }
+
+    let showUpdateForm = function (comment, csrfToken) {
+        let form = `
+            <div id="update-form-${comment.id}">
+                <form class="rounded" style="overflow: hidden" method="post" action="/blog/comment/update">
+                    <input type="hidden" name="csrf_token" value=${csrfToken}>
+                    <input type="hidden" name="method" value="patch">
+                    <input type="hidden" name="blog_id" value=${comment.blog_id}>
+                    <input type="hidden" name="parent_id" value=${comment.id}>
+                    <div>
+                        <textarea placeholder="Write a reply" rows="2" id="body" name="body" class="block w-full shadow border-gray-100" required autofocus autocomplete="body" >${comment.body}</textarea>
+                    </div>
+
+                    <div class="flex items-center">
+                        <button type="submit" style="display: block; width: 100%; background-color: #91D0C6; color: white;" class="py-1">Update Comment</button>
+                        <button type="button" style="display: block; width: 100%; background-color: #F3F3F3; color: gray;" class="py-1" onclick="cancelUpdate(${comment.id})">Cancel</button>
+                    </div>
+                </form>
+            </div>`
+        document.querySelector('#comment-' + comment.id + '>div').style.display = 'none'
+        document.querySelector('#comment-' + comment.id).innerHTML += form
+    }
+
+    let cancelUpdate = function (id) {
+        document.querySelector('#comment-' + id + '>div').style.display = 'block'
+        document.querySelector('#update-form-' + id).remove()
     }
 </script>
