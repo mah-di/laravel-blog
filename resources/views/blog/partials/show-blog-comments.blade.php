@@ -15,7 +15,6 @@
             <input type="hidden" name="parent_id" value>
             <div>
                 <textarea placeholder="{{ __('Write a comment') }}" rows="4" id="body" name="body" class="block w-full shadow border-gray-100" required autofocus autocomplete="body" >{{old('body')}}</textarea>
-                <x-input-error class="mt-2" :messages="$errors->get('body')" />
             </div>
 
             <div class="flex items-center">
@@ -230,10 +229,11 @@
         let form = `
             <div id="update-form-${comment.id}">
                 <form class="rounded" style="overflow: hidden" method="post" action="/comment/update">
-                    <input type="hidden" name="csrf_token" value=${csrfToken}>
-                    <input type="hidden" name="method" value="patch">
+                    <input type="hidden" name="_token" value=${csrfToken}>
+                    <input type="hidden" name="_method" value="patch">
+                    <input type="hidden" name="id" value=${comment.id}>
                     <input type="hidden" name="blog_id" value=${comment.blog_id}>
-                    <input type="hidden" name="parent_id" value=${comment.id}>
+                    <input type="hidden" name="parent_id" value=${comment.parent_id}>
                     <div>
                         <textarea placeholder="Write a reply" rows="2" id="body" name="body" class="block w-full shadow border-gray-100" required autofocus autocomplete="body" >${comment.body}</textarea>
                     </div>

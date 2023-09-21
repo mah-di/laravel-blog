@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Comment;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Comment\CommentCreateRequest;
+use App\Http\Requests\Comment\CommentUpdateRequest;
 use App\Models\Comment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,11 @@ class CommentController extends Controller
         Comment::where(['id' => $request->id])->delete();
 
         return Redirect::back()->with('message', 'Comment deleted');
+    }
+
+    public function updateComment(CommentUpdateRequest $request): RedirectResponse
+    {
+        return Redirect::back()->with('message', 'Comment updated');
     }
 
 }

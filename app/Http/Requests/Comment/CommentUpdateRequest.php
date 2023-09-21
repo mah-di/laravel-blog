@@ -5,7 +5,7 @@ namespace App\Http\Requests\Comment;
 use App\Models\Comment;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CommentCreateRequest extends FormRequest
+class CommentUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -34,16 +34,9 @@ class CommentCreateRequest extends FormRequest
         ];
     }
 
-    public function passedValidation()
+    public function passedValidation(): void
     {
-        $comment = [
-            'body' => $this->body,
-            'user_id' => $this->user()->id,
-            'blog_id' => $this->blog_id,
-            'parent_id' => $this->parent_id,
-        ];
-
-        Comment::create($comment);
+        Comment::find($this->id)->update(['body' => $this->body]);
     }
 
 }

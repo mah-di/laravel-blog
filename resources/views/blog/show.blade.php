@@ -20,6 +20,16 @@
     </div>
     @endif
 
+    @if ($errors->get('body'))
+    <div class="py-2">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="py-2 px-4 sm:py-2 sm:px-8 bg-white shadow sm:rounded-lg">
+                <p style="color: red;"><b><x-input-error class="mt-2" :messages="$errors->get('body')" /></b></p>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
