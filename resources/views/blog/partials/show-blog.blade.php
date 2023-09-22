@@ -2,12 +2,12 @@
     <div>
         @if (Auth::user() == $blogger)
         <div style="display: flex; justify-content: end;">
-            <a href="{{ route('blog.edit', $blog->id) }}"><x-primary-button>{{ __('Update') }}</x-primary-button></a>
+            <a href="{{ route('blog.edit', $blog->id) }}"><x-secondary-button>✏️</x-secondary-button></a>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <x-danger-button
                 x-data=""
                 x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion')"
-            >{{ __('Delete') }}</x-danger-button>
+            >☠️</x-danger-button>
 
             <x-modal name="confirm-blog-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
                 <form method="post" action="{{ route('blog.delete', $blog->id) }}" class="p-6">

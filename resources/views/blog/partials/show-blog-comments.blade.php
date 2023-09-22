@@ -36,12 +36,12 @@
 
                         <div>
                             @if (Auth::user() == $blogger)
-                                <x-secondary-button onclick='{{ "showUpdateForm($comment, `$csrfToken`)" }}'>{{ __('Update') }}</x-secondary-button>
+                                <x-secondary-button onclick='{{ "showUpdateForm($comment, `$csrfToken`)" }}'>✏️</x-secondary-button>
                                 &nbsp;&nbsp;
                                 <x-danger-button
                                     x-data=""
                                     x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion-{{ $comment->id }}')"
-                                >{{ __('Delete') }}</x-danger-button>
+                                >☠️</x-danger-button>
 
                                 <x-modal name="confirm-blog-deletion-{{ $comment->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
                                     <form method="post" action="{{ route('comment.delete') }}" class="p-6">
@@ -72,7 +72,34 @@
                         <p>{{ $comment->body }}</p>
                     </div>
                     <br>
-                    <x-secondary-button class="show-reply-form " id="show-reply-form-{{ $comment->id }}" onclick='{{ "showReplyForm($comment->id)" }}'>{{ __("Reply To This Comment ⤴") }}</x-secondary-button>
+
+                    <div style="display: flex; justify-content: space-between;">
+                        @if (Auth::user())
+                            @if ($comment->isLiked())
+                            <form method="post" action="{{ route('comment.unlike', $comment->id) }}">
+                                @csrf
+                                @method('delete')
+                                <x-secondary-submit-button>{{ __('💔 Unlike') }}</x-secondary-submit-button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {{ $comment->getLikesCount() }} likes
+                            </form>
+    
+                            @else
+                            <form method="post" action="{{ route('comment.like', $comment->id) }}">
+                                @csrf
+                                <x-secondary-submit-button>{{ __('❤️ Like') }}</x-secondary-submit-button>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                {{ $comment->getLikesCount() }} likes
+                            </form>
+                            @endif
+    
+                        @else
+                            <div>{{ $comment->getLikesCount() }} likes</div>
+                        @endif
+    
+                        <x-secondary-button class="show-reply-form " id="show-reply-form-{{ $comment->id }}" onclick='{{ "showReplyForm($comment->id)" }}'>{{ __("Reply To This Comment ⤴") }}</x-secondary-button>
+                    </div>
+
                 </div>
 
                 <div>
@@ -104,12 +131,12 @@
 
                             <div>
                                 @if (Auth::user() == $blogger)
-                                    <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>{{ __('Update') }}</x-secondary-button>
+                                    <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>✏️</x-secondary-button>
                                     &nbsp;&nbsp;
                                     <x-danger-button
                                         x-data=""
                                         x-on:click.prevent="$dispatch('open-modal', 'confirm-blog-deletion-{{ $reply->id }}')"
-                                    >{{ __('Delete') }}</x-danger-button>
+                                    >☠️</x-danger-button>
             
                                     <x-modal name="confirm-blog-deletion-{{ $reply->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
                                         <form method="post" action="{{ route('comment.delete') }}" class="p-6">
@@ -140,7 +167,34 @@
                             <p>{{ $reply->body }}</p>
                         </div>
                         <br>
-                        <x-secondary-button class="show-reply-form" id="show-reply-form-{{ $reply->id }}" onclick='{{ "showReplyForm($reply->id)" }}'>{{ __("Reply To This Comment ⤴") }}</x-secondary-button>
+
+                        <div style="display: flex; justify-content: space-between;">
+                            @if (Auth::user())
+                                @if ($reply->isLiked())
+                                <form method="post" action="{{ route('comment.unlike', $reply->id) }}">
+                                    @csrf
+                                    @method('delete')
+                                    <x-secondary-submit-button>{{ __('💔 Unlike') }}</x-secondary-submit-button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    {{ $reply->getLikesCount() }} likes
+                                </form>
+    
+                                @else
+                                <form method="post" action="{{ route('comment.like', $reply->id) }}">
+                                    @csrf
+                                    <x-secondary-submit-button>{{ __('❤️ Like') }}</x-secondary-submit-button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    {{ $reply->getLikesCount() }} likes
+                                </form>
+                                @endif
+    
+                            @else
+                                <div>{{ $reply->getLikesCount() }} likes</div>
+                            @endif
+    
+                            <x-secondary-button class="show-reply-form" id="show-reply-form-{{ $reply->id }}" onclick='{{ "showReplyForm($reply->id)" }}'>{{ __("Reply To This Comment ⤴") }}</x-secondary-button>
+                        </div>
+
                     </div>
 
                     <div>
@@ -171,12 +225,12 @@
 
                                 <div>
                                     @if (Auth::user() == $blogger)
-                                        <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>{{ __('Update') }}</x-secondary-button>
+                                        <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>✏️</x-secondary-button>
                                         &nbsp;&nbsp;
                                         <x-danger-button
                                             x-data=""
                                             x-on:click.prevent="$dispatch('open-modal', 'confirm-comment-deletion-{{ $reply->id }}')"
-                                        >{{ __('Delete') }}</x-danger-button>
+                                        >☠️</x-danger-button>
 
                                         <x-modal name="confirm-comment-deletion-{{ $reply->id }}" :show="$errors->userDeletion->isNotEmpty()" focusable>
                                             <form method="post" action="{{ route('comment.delete') }}" class="p-6">
@@ -206,6 +260,31 @@
                             <div class="mb-2 mt-2">
                                 <p>{{ $reply->body }}</p>
                             </div>
+                            <br>
+
+                            @if (Auth::user())
+                                @if ($reply->isLiked())
+                                <form method="post" action="{{ route('comment.unlike', $reply->id) }}">
+                                    @csrf
+                                    @method('delete')
+                                    <x-secondary-submit-button>{{ __('💔 Unlike') }}</x-secondary-submit-button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    {{ $reply->getLikesCount() }} likes
+                                </form>
+
+                                @else
+                                <form method="post" action="{{ route('comment.like', $reply->id) }}">
+                                    @csrf
+                                    <x-secondary-submit-button>{{ __('❤️ Like') }}</x-secondary-submit-button>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    {{ $reply->getLikesCount() }} likes
+                                </form>
+                                @endif
+
+                            @else
+                                <div>{{ $reply->getLikesCount() }} likes</div>
+                            @endif
+
                         </div>
                     </div>
 

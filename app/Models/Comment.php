@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Facades\Auth;
 
 class Comment extends Model
 {
@@ -40,6 +41,16 @@ class Comment extends Model
     public function likes(): MorphMany
     {
         return $this->morphMany(Like::class, 'likable');
+    }
+
+    public function isLiked(): bool
+    {
+        return $this->likes()->where(['user_id' => Auth::user()->id])->exists();
+    }
+
+    public function getLikesCount(): int
+    {
+        return $this->likes()->count();
     }
 
 }

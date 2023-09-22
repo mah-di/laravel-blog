@@ -80,14 +80,17 @@ Route::middleware('auth')->group(function () {
         Route::delete('/blog/delete/{id}', [BlogController::class, 'delete'])->name('blog.delete');
     });
 
+    Route::post('/blog/like/{id}', [LikeController::class, 'likeBlog'])->name('blog.like');
+    Route::delete('/blog/like/{id}', [LikeController::class, 'unlikeBlog'])->name('blog.unlike');
+    
     Route::middleware('comment.author.check')->group(function () {
         Route::delete('/comment/delete', [CommentController::class, 'deleteComment'])->name('comment.delete');
         Route::patch('/comment/update', [CommentController::class, 'updateComment'])->name('comment.update');
     });
-
-    Route::post('/blog/like/{id}', [LikeController::class, 'likeBlog'])->name('blog.like');
-    Route::delete('/blog/like/{id}', [LikeController::class, 'unlikeBlog'])->name('blog.unlike');
-    Route::post('/blog/comment', [CommentController::class, 'postComment'])->name('blog.comment');
+    
+    Route::post('/comment/post', [CommentController::class, 'postComment'])->name('blog.comment');
+    Route::post('/comment/like/{id}', [LikeController::class, 'likeBlog'])->name('comment.like');
+    Route::delete('/comment/like/{id}', [LikeController::class, 'unlikeBlog'])->name('comment.unlike');
 
 });
 
