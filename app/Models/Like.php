@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Like extends Model
 {
@@ -11,7 +12,8 @@ class Like extends Model
 
     protected $fillable = [
         'user_id',
-        'blog_id',
+        'likable_id',
+        'likable_type',
     ];
 
     public function user()
@@ -19,9 +21,9 @@ class Like extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function blog()
+    public function likable(): MorphTo
     {
-        return $this->belongsTo(Blog::class, 'blog_id');
+        return $this->morphTo();
     }
 
 }

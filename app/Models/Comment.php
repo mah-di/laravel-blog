@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Comment extends Model
 {
@@ -34,6 +35,11 @@ class Comment extends Model
     protected function getDateCreatedAttribute(): string
     {
         return date('d M Y', strtotime($this->created_at));
+    }
+
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likable');
     }
 
 }

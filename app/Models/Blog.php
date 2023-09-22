@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Support\Facades\Auth;
 
 class Blog extends Model
@@ -34,9 +35,9 @@ class Blog extends Model
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
-    public function likes()
+    public function likes(): MorphMany
     {
-        return $this->hasMany(Like::class, 'blog_id');
+        return $this->morphMany(Like::class, 'likable');
     }
 
     public function comments()
@@ -46,7 +47,7 @@ class Blog extends Model
 
     public function getLikesCount(): int
     {
-        return Like::where('blog_id', $this->id)->count();
+        return Like::where(['likable_id' => $this->id, 'likable_type' => Blog::class])->count();
     }
 
     public function getCommentsCount(): int
@@ -56,7 +57,7 @@ class Blog extends Model
 
     public function isLiked()
     {
-        return Like::where(['user_id' => Auth::user()->id, 'blog_id' => $this->id])->exists();
+        return Like::where(['user_id' => Auth::user()->id, 'likable_id' => $this->id, 'likable_type' => Blog::class])->exists();
     }
 
     public static function fetchBlogs($limit = 10, $where = null)
@@ -91,4 +92,5 @@ class Blog extends Model
     {
         return date('d M Y', strtotime($this->created_at));
     }
+
 }
