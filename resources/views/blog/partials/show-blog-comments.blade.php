@@ -35,7 +35,7 @@
                         </div>
 
                         <div>
-                            @if (Auth::user() == $blogger)
+                            @if (Auth::user() == $comment->user)
                                 <x-secondary-button onclick='{{ "showUpdateForm($comment, `$csrfToken`)" }}'>✏️</x-secondary-button>
                                 &nbsp;&nbsp;
                                 <x-danger-button
@@ -130,7 +130,7 @@
                             </div>
 
                             <div>
-                                @if (Auth::user() == $blogger)
+                                @if (Auth::user() == $reply->user)
                                     <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>✏️</x-secondary-button>
                                     &nbsp;&nbsp;
                                     <x-danger-button
@@ -224,7 +224,7 @@
                                 </div>
 
                                 <div>
-                                    @if (Auth::user() == $blogger)
+                                    @if (Auth::user() == $reply->user)
                                         <x-secondary-button onclick='{{ "showUpdateForm($reply, `$csrfToken`)" }}'>✏️</x-secondary-button>
                                         &nbsp;&nbsp;
                                         <x-danger-button
