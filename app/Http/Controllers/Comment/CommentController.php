@@ -19,7 +19,7 @@ class CommentController extends Controller
 
     public function deleteComment(Request $request): RedirectResponse
     {
-        Comment::where(['id' => $request->id])->delete();
+        Comment::find($request->id)->delete();
 
         return Redirect::back()->with('message', 'Comment deleted');
     }
