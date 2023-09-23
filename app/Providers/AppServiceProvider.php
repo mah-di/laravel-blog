@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Blog;
+use App\Models\Comment;
+use App\Observers\BlogObserver;
+use App\Observers\CommentObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Blog::observe(BlogObserver::class);
+        Comment::observe(CommentObserver::class);
     }
 }
