@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\Models\Blog\BlogDeleted;
+use App\Events\Models\Comment\CommentDeleted;
+use App\Listeners\DeleteBlogResources;
+use App\Listeners\DeleteCommentResources;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -17,6 +21,12 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        BlogDeleted::class => [
+            DeleteBlogResources::class,
+        ],
+        CommentDeleted::class => [
+            DeleteCommentResources::class,
         ],
     ];
 
