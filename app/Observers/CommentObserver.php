@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\Models\Comment\CommentDeleted;
+use App\Events\Models\Comment\CommentDeleting;
 use App\Models\Comment;
 
 class CommentObserver
@@ -26,9 +26,9 @@ class CommentObserver
     /**
      * Handle the Comment "deleted" event.
      */
-    public function deleted(Comment $comment): void
+    public function deleting(Comment $comment): void
     {
-        event(new CommentDeleted($comment));
+        event(new CommentDeleting($comment));
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Observers;
 
-use App\Events\Models\Blog\BlogDeleted;
+use App\Events\Models\Blog\BlogDeleting;
 use App\Models\Blog;
 
 class BlogObserver
@@ -26,9 +26,9 @@ class BlogObserver
     /**
      * Handle the Blog "deleted" event.
      */
-    public function deleted(Blog $blog): void
+    public function deleting(Blog $blog): void
     {
-        event(new BlogDeleted($blog));
+        event(new BlogDeleting($blog));
     }
 
     /**
