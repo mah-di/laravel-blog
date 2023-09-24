@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('comments', function (Blueprint $table) {
-            $table->foreignId('blog_id')->constrained('blogs', 'id')->cascadeOnDelete();
+            $table->foreign('blog_id')->references('id')->on('blogs')->cascadeOnDelete();
         });
     }
 };
