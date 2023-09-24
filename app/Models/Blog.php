@@ -78,7 +78,7 @@ class Blog extends Model
 
     protected function getBodyPreviewAttribute(): string
     {
-        $preview = str_split($this->body, 20)[0];
+        $preview = substr($this->body, 0, 20);
 
         return (strlen($this->body) > 20) ? "$preview.." : $preview;
     }
