@@ -24,7 +24,9 @@ class DeleteCommentResources
     {
         Like::where(['likable_type' => Comment::class, 'likable_id' => $event->comment->id])->delete();
 
-        foreach (Comment::where(['parent_id' => $event->comment->id])->get() as $comment)
+        $comments = Comment::where(['parent_id' => $event->comment->id])->get();
+
+        foreach ($comments as $comment)
         {
 
             $comment->delete();

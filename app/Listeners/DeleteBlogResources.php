@@ -25,7 +25,9 @@ class DeleteBlogResources
     {
         Like::where(['likable_type' => Blog::class, 'likable_id' => $event->blog->id])->delete();
 
-        foreach (Comment::where(['blog_id' => $event->blog->id, 'parent_id' => null])->get() as $comment)
+        $comments = Comment::where(['blog_id' => $event->blog->id, 'parent_id' => null])->get();
+
+        foreach ($comments as $comment)
         {
 
             $comment->delete();
