@@ -11,7 +11,7 @@
 
         <div>
             <p>Total Blogs - <i>{{ $blogCount }}</i></p>
-            <p>Date Joined - <i>{{ $user->date_joined }}</i></p>
+            <p>Date Joined - <i>{{ $user->date_created }}</i></p>
             <p>Email - <i>{{ $user->email }}</i></p>
         </div>
     </div>

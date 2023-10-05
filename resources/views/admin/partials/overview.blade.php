@@ -9,7 +9,7 @@
             <br>
             <p><b>New Users</b></p>
             @foreach($newUsers as $user)
-            <small><b><a href="{{ route('profile.show', $user->id) }}">{{ $user->name }}</a></b> | {{ $user->email }} | Date Joined : {{ $user->date_joined }}</small><br>
+            <small><b><a href="{{ route('profile.show', $user->id) }}">{{ $user->name }}</a></b> | {{ $user->email }} | Date Joined : {{ $user->date_created }}</small><br>
             @endforeach
         </div>
         
