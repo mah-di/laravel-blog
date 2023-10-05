@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
     public function create(Request $request): View
     {
-        return view('category.show-categories');
+        return view('admin.category.create');
     }
 
     public function store(CategoryCreateRequest $request): RedirectResponse
