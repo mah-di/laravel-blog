@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasDateCreatedTrait;
+use App\Models\Traits\HasLikesTrait;
+use App\Models\Traits\HasUserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Facades\Auth;
 
 class Blog extends Model
 {
-    use HasFactory;
+    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait;
 
     protected $fillable = [
         'title',
@@ -19,11 +20,6 @@ class Blog extends Model
         'category_id',
         'sub_category_id',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
 
     public function category()
     {
@@ -35,29 +31,14 @@ class Blog extends Model
         return $this->belongsTo(SubCategory::class, 'sub_category_id');
     }
 
-    public function likes(): MorphMany
-    {
-        return $this->morphMany(Like::class, 'likable');
-    }
-
     public function comments()
     {
         return $this->hasMany(Comment::class, 'blog_id')->whereNull('parent_id');
     }
 
-    public function getLikesCount(): int
-    {
-        return Like::where(['likable_id' => $this->id, 'likable_type' => Blog::class])->count();
-    }
-
     public function getCommentsCount(): int
     {
         return Comment::where('blog_id', $this->id)->count();
-    }
-
-    public function isLiked()
-    {
-        return Like::where(['user_id' => Auth::user()->id, 'likable_id' => $this->id, 'likable_type' => Blog::class])->exists();
     }
 
     public static function fetchBlogs($limit = 10, $where = null)
@@ -86,11 +67,6 @@ class Blog extends Model
     protected function getCoverImageUrlAttribute(): string
     {
         return env('APP_URL')."/storage/$this->cover_image";
-    }
-
-    protected function getDateCreatedAttribute(): string
-    {
-        return date('d M Y', strtotime($this->created_at));
     }
 
 }

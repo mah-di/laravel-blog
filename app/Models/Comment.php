@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasDateCreatedTrait;
+use App\Models\Traits\HasLikesTrait;
+use App\Models\Traits\HasUserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Support\Facades\Auth;
 
 class Comment extends Model
 {
-    use HasFactory;
+    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait;
 
     protected $fillable = [
         'body',
@@ -17,11 +18,6 @@ class Comment extends Model
         'blog_id',
         'parent_id',
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
 
     public function blog()
     {
@@ -31,26 +27,6 @@ class Comment extends Model
     public function replies()
     {
         return $this->hasMany(Comment::class, 'parent_id');
-    }
-
-    protected function getDateCreatedAttribute(): string
-    {
-        return date('d M Y', strtotime($this->created_at));
-    }
-
-    public function likes(): MorphMany
-    {
-        return $this->morphMany(Like::class, 'likable');
-    }
-
-    public function isLiked(): bool
-    {
-        return $this->likes()->where(['user_id' => Auth::user()->id])->exists();
-    }
-
-    public function getLikesCount(): int
-    {
-        return $this->likes()->count();
     }
 
 }

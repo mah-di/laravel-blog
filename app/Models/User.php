@@ -4,8 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use DateTime;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Models\Traits\HasDateCreatedTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasDateCreatedTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -67,15 +66,10 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($value);
     }
-    
+
     protected function getProfileImageUrlAttribute(): string
     {
         return (strpos($this->profile_image, '://')) ? $this->profile_image : env('APP_URL')."/storage/$this->profile_image";
-    }
-    
-    protected function getDateJoinedAttribute(): string
-    {
-        return date('d M Y', strtotime($this->created_at));
     }
 
     public function getBlogsSevenDaysAttribute()
