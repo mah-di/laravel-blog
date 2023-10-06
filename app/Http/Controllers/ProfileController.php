@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Facades\ImageCleanupFacade;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\BlogResource;
 use App\Models\Blog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
@@ -28,6 +30,15 @@ class ProfileController extends Controller
         $blogCount = Blog::where(['user_id' => $user->id])->count();
 
         return view('profile.show', ['user' => $user, 'blogs' => $blogs, 'blogCount' => $blogCount]);
+    }
+
+    public function getBlogs(Request $request, int $user_id): ResourceCollection
+    {
+        $pageSize = $request->pageSize ?? 5;
+
+        $blogs = (Blog::latest()->where(['user_id' => $user_id])->paginate($pageSize));
+
+        return BlogResource::collection($blogs);
     }
 
     /**
