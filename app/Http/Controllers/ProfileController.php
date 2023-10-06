@@ -26,10 +26,7 @@ class ProfileController extends Controller
             abort(404);
         }
 
-        $blogs = Blog::fetchBlogs(4, ['user_id' => $user->id]);
-        $blogCount = Blog::where(['user_id' => $user->id])->count();
-
-        return view('profile.show', ['user' => $user, 'blogs' => $blogs, 'blogCount' => $blogCount]);
+        return view('profile.show', ['user' => $user]);
     }
 
     public function getBlogs(Request $request, int $user_id): ResourceCollection
