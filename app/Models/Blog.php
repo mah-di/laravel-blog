@@ -69,4 +69,9 @@ class Blog extends Model
         return env('APP_URL')."/storage/$this->cover_image";
     }
 
+    protected function getUrlAttribute(): string
+    {
+        return env('APP_URL')."/blog/$this->id";
+    }
+
 }
