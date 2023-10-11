@@ -34,4 +34,11 @@ class SubCategoryController extends Controller
         return view('subCategory.show', ['subCategory' => $subCategory]);
     }
 
+    public function fetchBlogs(int $id, int $pageSize = 5): ResourceCollection
+    {
+        $blogs = Blog::latest()->where(['sub_category_id' => $id])->paginate($pageSize);
+
+        return BlogResource::collection($blogs);
+    }
+
 }

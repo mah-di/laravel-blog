@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SubCategoryController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/blogs/{user_id}', [ProfileController::class, "getBlogs"])->name('profile.blogs');
+Route::get('/category/blogs/{id}', [CategoryController::class, "fetchBlogs"])->name('category.blogs');
+Route::get('/sub_category/blogs/{id}', [SubCategoryController::class, "fetchBlogs"])->name('subCategory.blogs');

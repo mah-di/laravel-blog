@@ -66,4 +66,11 @@ class CategoryController extends Controller
         return view('category.show', ['category' => $category]);
     }
 
+    public function fetchBlogs(int $id, int $pageSize = 5): ResourceCollection
+    {
+        $blogs = Blog::latest()->where(['category_id' => $id])->paginate($pageSize);
+
+        return BlogResource::collection($blogs);
+    }
+
 }
