@@ -20,7 +20,7 @@ class Category extends Model
 
     public function blogs()
     {
-        return $this->hasMany(Blog::class, 'blog_id');
+        return $this->hasMany(Blog::class, 'category_id');
     }
 
 }

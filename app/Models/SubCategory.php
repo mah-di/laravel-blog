@@ -16,12 +16,12 @@ class SubCategory extends Model
 
     public function category()
     {
-        $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
     public function blogs()
     {
-        return $this->hasMany(Blog::class, 'blog_id');
+        return $this->hasMany(Blog::class, 'sub_category_id');
     }
 
 }
