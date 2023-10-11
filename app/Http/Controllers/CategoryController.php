@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CategoryCreateRequest;
 use App\Http\Requests\Category\CategoryUpdateRequest;
+use App\Http\Resources\BlogResource;
+use App\Models\Blog;
 use App\Models\Category;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Redirect;
 
 class CategoryController extends Controller
@@ -54,6 +57,13 @@ class CategoryController extends Controller
         Category::find($id)->delete();
 
         return Redirect::back();
+    }
+
+    public function showBlogs(Request $request, int $id): View
+    {
+        $category = Category::find($id);
+
+        return view('category.show', ['category' => $category]);
     }
 
 }

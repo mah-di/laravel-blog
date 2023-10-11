@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\SubCategoryCreateRequest;
+use App\Http\Resources\BlogResource;
+use App\Models\Blog;
 use App\Models\SubCategory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Facades\Redirect;
 
 class SubCategoryController extends Controller
@@ -21,6 +25,13 @@ class SubCategoryController extends Controller
     public function create(SubCategoryCreateRequest $request): RedirectResponse
     {
         return Redirect::back();
+    }
+
+    public function showBlogs(Request $request, int $id): View
+    {
+        $subCategory = SubCategory::find($id);
+
+        return view('subCategory.show', ['subCategory' => $subCategory]);
     }
 
 }

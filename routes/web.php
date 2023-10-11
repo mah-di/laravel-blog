@@ -97,4 +97,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/blog/{id}', [BlogController::class, 'show'])->middleware('blog.exists')->name('blog.show');
 
+Route::get('/category/{id}', [CategoryController::class, 'showBlogs'])->name('category.blogs.show');
+Route::get('/sub_category/{id}', [SubCategoryController::class, 'showBlogs'])->name('subCategory.blogs.show');
+
 require __DIR__.'/auth.php';
