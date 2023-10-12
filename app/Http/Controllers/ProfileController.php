@@ -29,6 +29,13 @@ class ProfileController extends Controller
         return view('profile.show', ['user' => $user]);
     }
 
+    public function showDashboard(Request $request): View
+    {
+        $user = $request->user();
+
+        return view('profile.dashboard', ['user' => $user]);
+    }
+
     public function getBlogs(Request $request, int $user_id): ResourceCollection
     {
         $pageSize = $request->pageSize ?? 5;
