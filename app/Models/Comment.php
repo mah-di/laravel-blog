@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasBodyPreviewTrait;
 use App\Models\Traits\HasDateCreatedTrait;
 use App\Models\Traits\HasLikesTrait;
 use App\Models\Traits\HasUserTrait;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait;
+    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait, HasBodyPreviewTrait;
 
     protected $fillable = [
         'body',
@@ -27,6 +28,11 @@ class Comment extends Model
     public function replies()
     {
         return $this->hasMany(Comment::class, 'parent_id');
+    }
+
+    public function getRepliesCount(): int
+    {
+        return $this->replies->count();
     }
 
 }

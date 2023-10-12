@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasBodyPreviewTrait;
 use App\Models\Traits\HasDateCreatedTrait;
 use App\Models\Traits\HasLikesTrait;
 use App\Models\Traits\HasUserTrait;
@@ -10,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Blog extends Model
 {
-    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait;
+    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait, HasBodyPreviewTrait;
 
     protected $fillable = [
         'title',
@@ -55,13 +56,6 @@ class Blog extends Model
     protected function getTitleUpperAttribute(): string
     {
         return strtoupper($this->title);
-    }
-
-    protected function getBodyPreviewAttribute(): string
-    {
-        $preview = substr($this->body, 0, 20);
-
-        return (strlen($this->body) > 20) ? "$preview.." : $preview;
     }
 
     protected function getCoverImageUrlAttribute(): string
