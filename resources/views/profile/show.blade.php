@@ -68,9 +68,13 @@
     
                                     <!-- Description -->
                                     <small>
-                                        <span class="px-1 py-1 bg-gray-100 rounded">${ blog.category }</span>
+                                        <a href="http://localhost:8000/category/${ blog.category_id }">
+                                            <span class="px-1 py-1 bg-gray-100 rounded">${ blog.category }</span>
+                                        </a>
                                         → 
-                                        <span class="px-1 py-1 bg-gray-100 rounded">${ blog.sub_category }</span>
+                                        <a href="http://localhost:8000/sub_category/${ blog.sub_category_id }">
+                                            <span class="px-1 py-1 bg-gray-100 rounded">${ blog.sub_category }</span>
+                                        </a>
                                     </small>
                                     <br>
                                     <small class="leading-5 text-gray-700 dark:text-gray-400">

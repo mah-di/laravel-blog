@@ -13,7 +13,11 @@
         <div style="display: flex; justify-content: space-between;">
             <div>
                 <div style="display: flex; justify-content: space-between; margin: 4px;">
-                    <a href="{{ route('category.update', $category->id) }}"><b>{{ $category->name }}</b></a>
+                    <a href="{{ route('category.blogs.show', $category->id) }}">
+                        <b>{{ $category->name }}</b>
+                    </a>
+                    <p>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                        <small><a href="{{ route('category.update', $category->id) }}"><button style="background-color:skyblue; color:whitesmoke; cursor: pointer;" class="rounded px-1 py-1">update</button></a></small>
                     <p>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;</p>
                     <form method="post" action="{{ route('category.delete', $category->id) }}" onsubmit="(e) => {e.preventDefault();confirm('Are you sure about that?')}">
                         @csrf
@@ -29,7 +33,13 @@
                 @foreach($category->sub_categories as $sub_category)
                 <div style="display: inline-block;">
                     <div style="display: flex; margin: 4px;" class="bg-white px-1 py-1 rounded">
-                        <small>{{ $sub_category->name }}&nbsp;&nbsp;</small>
+                        <small>
+                            <a href="{{ route('subCategory.blogs.show', $sub_category->id) }}" style="color: yellowgreen">
+                                {{ $sub_category->name }}
+                            </a>
+                            &nbsp;&nbsp;
+                        </small>
+                        
                         <form style="margin-bottom: -5px;" action="{{ route('subCategory.delete', $sub_category->id) }}" method="post">
                             @csrf
                             @method('delete')

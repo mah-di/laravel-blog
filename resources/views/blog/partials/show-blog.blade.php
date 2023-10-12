@@ -48,10 +48,14 @@
                 @if($blog->category)
                 <small>
                     <i>Posted in:</i>&nbsp;&nbsp;
-                    <span class="px-1 py-1 bg-gray-100 rounded">{{ $blog->category->name }}</span>
+                    <a href="{{ route('category.blogs.show', $blog->category_id) }}">
+                        <span class="px-1 py-1 bg-gray-100 rounded">{{ $blog->category->name }}</span>
+                    </a>
                     @if($blog->sub_category)
-                     → 
-                    <span class="px-1 py-1 bg-gray-100 rounded">{{ $blog->sub_category->name }}</span>
+                    → 
+                    <a href="{{ route('subCategory.blogs.show', $blog->sub_category_id) }}">
+                        <span class="px-1 py-1 bg-gray-100 rounded">{{ $blog->sub_category->name }}</span>
+                    </a>
                     @endif
                 </small><br>
                 @endif
