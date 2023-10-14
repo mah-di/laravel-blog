@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Models\Traits\HasBodyPreviewTrait;
 use App\Models\Traits\HasDateCreatedTrait;
 use App\Models\Traits\HasLikesTrait;
+use App\Models\Traits\HasUrlTrait;
 use App\Models\Traits\HasUserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait, HasBodyPreviewTrait;
+    use HasFactory, HasDateCreatedTrait, HasUserTrait, HasLikesTrait, HasBodyPreviewTrait, HasUrlTrait;
 
     protected $fillable = [
         'body',
@@ -33,6 +34,11 @@ class Comment extends Model
     public function getRepliesCount(): int
     {
         return $this->replies->count();
+    }
+
+    protected function getUrlAttribute(): string
+    {
+        return $this->constructUrl('blog', $this->blog_id);
     }
 
 }

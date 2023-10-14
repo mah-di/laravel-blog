@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasUrlTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class SubCategory extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUrlTrait;
 
     protected $fillable = [
         'name',
@@ -22,6 +23,11 @@ class SubCategory extends Model
     public function blogs()
     {
         return $this->hasMany(Blog::class, 'sub_category_id');
+    }
+
+    protected function getUrlAttribute(): string
+    {
+        return $this->constructUrl('sub_category');
     }
 
 }
