@@ -68,12 +68,12 @@
     
                                     <!-- Description -->
                                     <small>
-                                        <a href="http://localhost:8000/category/${ blog.category_id }">
-                                            <span class="px-1 py-1 bg-gray-100 rounded">${ blog.category }</span>
+                                        <a href="${ blog.category.url }">
+                                            <span class="px-1 py-1 bg-gray-100 rounded">${ blog.category.name }</span>
                                         </a>
                                         → 
-                                        <a href="http://localhost:8000/sub_category/${ blog.sub_category_id }">
-                                            <span class="px-1 py-1 bg-gray-100 rounded">${ blog.sub_category }</span>
+                                        <a href="${ blog.sub_category.url }">
+                                            <span class="px-1 py-1 bg-gray-100 rounded">${ blog.sub_category.name }</span>
                                         </a>
                                     </small>
                                     <br>
@@ -83,7 +83,7 @@
 
                                     <p
                                         class="leading-5 text-gray-500 dark:text-gray-400">
-                                        ${ blog.body }
+                                        ${ blog.body_preview }
                                     </p>
                                 </figcaption>
                             </figure>
@@ -99,7 +99,6 @@
             fetch( url )
                 .then( ( response ) => response.json() )
                 .then( ( response ) => {
-console.log(response)
                     let blogCards = createBlogCards( response.data )
                     document.querySelector( '#user-blogs' ).innerHTML += blogCards
                     

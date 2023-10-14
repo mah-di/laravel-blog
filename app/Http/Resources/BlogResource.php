@@ -18,16 +18,28 @@ class BlogResource extends JsonResource
             'id'                =>      $this->id,
             'cover_image'       =>      $this->cover_image_url,
             'title'             =>      $this->title_upper,
-            'body'              =>      $this->body_preview,
+            'body_preview'      =>      $this->body_preview,
             'url'               =>      $this->url,
             'date_created'      =>      $this->date_created,
-            'user_id'           =>      $this->user_id,
-            'user_name'         =>      $this->user->name,
-            'user_avatar'       =>      $this->user->profile_image_url,
-            'category_id'       =>      $this->category_id,
-            'category'          =>      $this->category->name,
-            'sub_category_id'   =>      $this->sub_category_id,
-            'sub_category'      =>      $this->sub_category->name,
+
+            'user'              =>  [
+                'id'            =>      $this->user_id,
+                'name'          =>      $this->user->name,
+                'avatar'        =>      $this->user->profile_image_url,
+                'url'           =>      $this->user->url,
+            ],
+
+            'category'          =>  [
+                'id'            =>      $this->category_id,
+                'name'          =>      $this->category->name,
+                'url'           =>      $this->category->url,
+            ],
+            
+            'sub_category'      =>  [
+                'id'            =>      $this->sub_category_id,
+                'name'          =>      $this->sub_category->name,
+                'url'           =>      $this->sub_category->url,
+            ],
         ];
     }
 }
