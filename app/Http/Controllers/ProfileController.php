@@ -40,11 +40,19 @@ class ProfileController extends Controller
         return view('profile.dashboard', ['user' => $user]);
     }
 
-    public function getLikedBlogs(Request $request, int $id)
-    {}
+    public function getLikedBlogs(Request $request, int $id, int $pageSize = 5): ResourceCollection
+    {
+        $likes = Like::where(["user_id" => $id, "likable_type" => Blog::class])->latest()->paginate($pageSize);
 
-    public function getLikedComments(Request $request, int $id)
-    {}
+        return BlogLikeResource::collection($likes);
+    }
+
+    public function getLikedComments(Request $request, int $id, int $pageSize = 5): ResourceCollection
+    {
+        $likes = Like::where(["user_id" => $id, "likable_type" => Comment::class])->latest()->paginate($pageSize);
+
+        return CommentLikeResource::collection($likes);
+    }
 
     public function getBlogs(Request $request, int $user_id): ResourceCollection
     {
