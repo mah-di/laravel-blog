@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Facades\ImageCleanupFacade;
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Resources\BlogLikeResource;
 use App\Http\Resources\BlogResource;
+use App\Http\Resources\CommentLikeResource;
 use App\Models\Blog;
+use App\Models\Comment;
+use App\Models\Like;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -35,6 +39,12 @@ class ProfileController extends Controller
 
         return view('profile.dashboard', ['user' => $user]);
     }
+
+    public function getLikedBlogs(Request $request, int $id)
+    {}
+
+    public function getLikedComments(Request $request, int $id)
+    {}
 
     public function getBlogs(Request $request, int $user_id): ResourceCollection
     {

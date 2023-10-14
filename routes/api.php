@@ -24,3 +24,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/blogs/{user_id}', [ProfileController::class, "getBlogs"])->name('profile.blogs');
 Route::get('/category/blogs/{id}', [CategoryController::class, "fetchBlogs"])->name('category.blogs');
 Route::get('/sub_category/blogs/{id}', [SubCategoryController::class, "fetchBlogs"])->name('subCategory.blogs');
+Route::get('/user/{id}/liked-blogs', [ProfileController::class, "getLikedBlogs"])->name('user.likedBlogs');
+Route::get('/user/{id}/liked-comments', [ProfileController::class, "getLikedComments"])->name('user.likedComments');
